@@ -1,18 +1,17 @@
-from src.entity.config_entity import DatabaseConfig
+from src.constants import database
 from pymongo import MongoClient
 from typing import List, Dict, Any
 import os
 
 class MongoDBClient(object):
     def __init__(self):
-        self.config = DatabaseConfig()
-        url = self.config.URL.replace("<username>", self.config.USERNAME).replace("<password>", self.config.PASSWORD)
+        url = database.URL
         self.client = MongoClient(url)
 
     def insert_bulk_record(self, documents: List[Dict[str, Any]]):
         try:
-            db = self.client[self.config.DBNAME]
-            collection = self.config.COLLECTION
+            db = self.client[database.DATABASE_NAME]
+            collection = database.COLLECTION_NAME
             if collection not in db.list_collection_names():
                 db.create_collection(collection)
             result = db[collection].insert_many(documents)
@@ -22,8 +21,8 @@ class MongoDBClient(object):
 
     def get_collection_documents(self):
         try:
-            db = self.client[self.config.DBNAME]
-            collection = self.config.COLLECTION
+            db = self.client[database.DATABASE_NAME]
+            collection = database.COLLECTION_NAME
             result = db[collection].find()
             return {"Response": "Success", "Info": result}
         except Exception as e:
@@ -31,8 +30,8 @@ class MongoDBClient(object):
 
     def drop_collection(self):
         try:
-            db = self.client[self.config.DBNAME]
-            collection = self.config.COLLECTION
+            db = self.client[database.DATABASE_NAME]
+            collection = database.COLLECTION_NAME
             db[collection].drop()
             return {"Response": "Success"}
         except Exception as e:
