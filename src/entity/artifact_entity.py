@@ -2,6 +2,9 @@ from dataclasses import dataclass
 
 @dataclass
 class DataIngestionArtifact:
-    training_data_dir: str
-    testing_data_dir: str
-    
+    raw_data_dir: str
+
+@dataclass 
+class DataValidationArtifact:
+    labels_schema_file_path: str
+    valid_data_dir: str
