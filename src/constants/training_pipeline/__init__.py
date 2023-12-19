@@ -18,7 +18,7 @@ Data ingestion related constants start with DATA_INGESTION VAR NAME
 
 # DATA_INGESTION_COLLECTION_NAME = ""
 DATA_INGESTION_DIR_NAME = "data_ingestion"
-DATA_INGESTION_FEATURE_STORE_DIR= "feature_store"
+# DATA_INGESTION_FEATURE_STORE_DIR= "feature_store"
 # DATA_INGESTION_INGESTED_DIR= "ingested_videos"
 DATA_INGESTION_RAW_DIR = "raw"
 DATA_INGESTION_TRAIN_DIR = "splitted/train"
@@ -26,3 +26,15 @@ DATA_INEGSTION_TEST_DIR = "splitted/test"
 
 DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO = 0.8
 DATA_INGESTION_SEED_VALUE = 47
+
+"""
+Data Validation related constants
+"""
+DATA_VALIDATION_DIR_NAME: str = "data_validation"
+MINIMUM_NO_OF_VIDEOS: int = 2
+LABELS_SCHEMA_FILE_DIR: str = "schema"
+LABELS_SCHEMA_FILE_NAME = 'labels_schema.yaml'
+DATA_VALIDATION_VALID_DATA_DIR: str = "valid"
+
+SCHEMA_KEY = "LABELS"
+VALID_EXTENSIONS = ['.mp4']

@@ -7,4 +7,5 @@ awscli==1.32.2
 boto3==1.24.73
 scikit-learn
 pymongo==4.2.0
+python-dotenv
 -e .

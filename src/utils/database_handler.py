@@ -24,7 +24,7 @@ class MongoDBClient(object):
             db = self.client[database.DATABASE_NAME]
             collection = database.COLLECTION_NAME
             result = db[collection].find()
-            return {"Response": "Success", "Info": result}
+            return result
         except Exception as e:
             raise e
 
