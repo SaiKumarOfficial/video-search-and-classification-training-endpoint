@@ -50,3 +50,29 @@ class DataValidationConfig:
 
         self.minimum_required_videos: int = training_pipeline.MINIMUM_NO_OF_VIDEOS
 
+class DataPreparationConfig:
+    def __init__(self,training_pipeline_config: TrainingPipelineConfig):
+        self.data_preparation_dir: str = os.path.join(training_pipeline_config.artifact_dir,
+                                                      training_pipeline.DATA_PREPARATION_DIR_NAME)
+        
+        self.features_train_file_path: str = os.path.join(self.data_preparation_dir,
+                                                         training_pipeline.DATA_PREPARATION_SPLITTED_DATA_DIR,
+                                                         training_pipeline.TRAIN_FILE_PATH,
+                                                         training_pipeline.FEATURES_TRAIN_FILE_NAME)
+        self.features_test_file_path: str = os.path.join(self.data_preparation_dir,
+                                                        training_pipeline.DATA_PREPARATION_SPLITTED_DATA_DIR,
+                                                        training_pipeline.TEST_FILE_PATH,
+                                                        training_pipeline.FEATURES_TEST_FILE_NAME)
+        self.labels_train_file_path: str = os.path.join(self.data_preparation_dir,
+                                                        training_pipeline.DATA_PREPARATION_SPLITTED_DATA_DIR,
+                                                        training_pipeline.TRAIN_FILE_PATH,
+                                                        training_pipeline.LABELS_TRAIN_FILE_NAME)
+        self.labels_test_file_path: str = os.path.join(self.data_preparation_dir,
+                                                        training_pipeline.DATA_PREPARATION_SPLITTED_DATA_DIR,
+                                                        training_pipeline.TEST_FILE_PATH,
+                                                        training_pipeline.LABELS_TEST_FILE_NAME)
+        self.train_test_split_ratio: float = training_pipeline.DATA_PREPARATION_TRAIN_TEST_SPLIT_RATIO
+        
+        self.seed_value: int = training_pipeline.DATA_PREPARATION_SEED_VALUE
+
+        self.shuffle: bool = training_pipeline.DATA_PREPARATION_SHUFFLE
