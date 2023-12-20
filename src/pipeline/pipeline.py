@@ -1,7 +1,8 @@
-from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig
-from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataPreparationConfig
+from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact,DataPreparationArtifact
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
+from src.components.data_preparation import DataPreparation
 from src.logger import logging
 from src.exception import CustomException
 import os,sys
@@ -34,7 +35,16 @@ class TrainPipeline:
         except Exception as e:
             raise CustomException(e,sys)
 
+    def start_data_preparation(self, data_validataion_artifact: DataValidationArtifact) -> DataPreparationArtifact:
+        try:
+            self.data_preparation_config = DataPreparationConfig(self.training_pipeline_config)
+            data_preparation = DataPreparation(data_validataion_artifact,
+                                                self.data_preparation_config)
+            data_preparation_artifact = data_preparation.run_steps()
 
+            return data_preparation_artifact
+        except Exception as e:
+            raise CustomException(e,sys)
     def run_pipeline(self):
         try:
             logging.info("===============Training Pipleline is start running=============")
@@ -42,6 +52,7 @@ class TrainPipeline:
             TrainPipeline.is_pipeline_running= True
             data_ingestion_artifact: DataIngestionArtifact = self.start_data_ingestion()
             data_validataion_artifact: DataValidationArtifact  = self.start_data_validation(data_ingestion_artifact)
+            data_preparation_artifact: DataPreparationArtifact = self.start_data_preparation(data_validataion_artifact)
             logging.info("=============Training Pipleline has successfully completed!!!===========")
 
         except Exception as e:
