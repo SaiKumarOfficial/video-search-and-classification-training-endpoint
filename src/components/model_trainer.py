@@ -3,7 +3,7 @@ from src.entity.artifact_entity import ModelTrainerArtifact, DataPreparationArti
 from src.exception import CustomException
 from src.constants import training_pipeline 
 from src.logger import logging
-from src.utils.common import get_classification_metrics,read_yaml,load_numpy_array_data
+from src.utils.common import get_classification_score,read_yaml,load_numpy_array_data
 from tensorflow.keras.models import Sequential   
 from tensorflow.keras.layers import TimeDistributed, Flatten, LSTM, Dropout, Dense
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
@@ -100,7 +100,7 @@ class ModelTrainer:
         true_labels = np.argmax(y_true, axis=1)
         
         # Calculate accuracy
-        classification_metrics = get_classification_metrics(true_labels,predicted_labels)
+        classification_metrics = get_classification_score(true_labels,predicted_labels)
 
         return classification_metrics
         
@@ -116,6 +116,7 @@ class ModelTrainer:
         
     def run_steps(self):
         try:
+            logging.info("========== Starting model training phase ==================")
             schema_file_path = self.data_validation_artifact.labels_schema_file_path
             model = self.create_LRCN_model(schema_file_path)
 
@@ -150,7 +151,7 @@ class ModelTrainer:
             model_trainer_artifact = ModelTrainerArtifact(trained_model_file_path= model_file_path,
                                                         train_metric_artifact= classification_train_metrics,
                                                         test_metric_artifact= classification_test_metrics)
-
+            logging.info("=============== Completed model traininig==============")
             return model_trainer_artifact
         
         except Exception as e:

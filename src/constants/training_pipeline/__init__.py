@@ -72,7 +72,7 @@ MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float= 0.06
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.h5"
 
 SAVED_MODEL_DIR:str = os.path.join("saved_models")
-MODEL_FILE_NAME:str = "model.pkl"
+MODEL_FILE_NAME:str = "model.h5"
 
 OPTIMIZER_TYPE = "Adam"
 OPTIMIZER_LR = 0.001
@@ -84,17 +84,17 @@ EPOCHS = 30
 ER_STOP_PATIENCE = 20
 
 
-# """
-# Model Evaluation related constants start with MODEL EVALUATION VAR NAME
-# """
-# MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
-# MODEL_EVALUATION_DIR_NAME: str = "model_evaluation"
-# MODEL_EVALUATION_REPORT_NAME: str = "report.yaml"
+"""
+Model Evaluation related constants start with MODEL EVALUATION VAR NAME
+"""
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE: float = 0.02
+MODEL_EVALUATION_DIR_NAME: str = "model_evaluation"
+MODEL_EVALUATION_REPORT_NAME: str = "report.yaml"
 
-# """
-# Model pusher related constanst start with MODEL PUSHER
-# """
-# MODEL_PUSHER_DIR_NAME: str = "model_pusher"
-# MODEL_PUSHER_SAVED_MODEL_DIR: str = SAVED_MODEL_DIR
+"""
+Model pusher related constanst start with MODEL PUSHER
+"""
+MODEL_PUSHER_DIR_NAME: str = "model_pusher"
+MODEL_PUSHER_SAVED_MODEL_DIR: str = SAVED_MODEL_DIR
 
 
