@@ -1,5 +1,5 @@
 from src.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataValidationConfig,DataPreparationConfig,ModelTrainerConfig, ModelEvaluationConfig, ModelPusherConfig,AnnoyConfig
-from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact,DataPreparationArtifact, ModelTrainerArtifact,ModelEvaluationArtifact, ModelPusherArtifact
+from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact,DataPreparationArtifact, ModelTrainerArtifact,ModelEvaluationArtifact, ModelPusherArtifact, AnnoyArtifact
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.data_preparation import DataPreparation
@@ -8,6 +8,7 @@ from src.components.model_evaluation import ModelEvaluation
 from src.components.model_pusher import ModelPusher
 from src.components.embeddings import EmbeddingGenerator, VideoFolder
 from src.components.nearest_neighbour import Annoy
+from src.components.predict import Prediction
 from src.constants.training_pipeline import SEQUENCE_LENGTH, IMAGE_HEIGHT,IMAGE_WIDTH
 from src.utils.storage_handler import S3Connector
 from src.logger import logging
@@ -108,9 +109,9 @@ class TrainPipeline:
 
         logging.info("Step 3: Create EmbeddingGenerator instance")
         embeds = EmbeddingGenerator(model_pusher_artifact)
-        print(dataloader)
+
         logging.info("Step 4: Process each batch")
-        count = 0 
+
         for batch, values in tqdm(enumerate(dataloader)):
             video_frames, target, link = values
 
@@ -125,8 +126,14 @@ class TrainPipeline:
     def create_annoy(self):
         annoy_config = AnnoyConfig(self.training_pipeline_config)
         ann = Annoy(annoy_config)
-        ann.run_step()
+        annoy_artifact = ann.run_step()
+        return annoy_artifact
     
+    def start_predictions(self, model_pusher_artifact: ModelPusherArtifact, annoy_artifact: AnnoyArtifact,video_file_path):
+        predictions = Prediction( model_pusher_artifact, annoy_artifact)
+        resultant_links = predictions.run_predictions(video_file_path)
+    
+        return resultant_links
     # @staticmethod
     # def push_artifacts():
     #     connection = S3Connector()
@@ -147,7 +154,13 @@ class TrainPipeline:
             model_pusher_artifact: ModelPusherArtifact = self.start_model_pusher(model_evaluation_artifact)
 
             self.generated_embeddings(data_validataion_artifact, model_pusher_artifact)
-            self.create_annoy()
+            annoy_artifact = self.create_annoy()
+
+            video_file_path = "C:\\Users\\Sheela Sai kumar\\Documents\\ML projects\\video-streaming-training-endpoint\\src\\pipeline\\artifact\\12_25_23_20_04_36\\data_ingestion\\raw\\Graphics\\Video001-Scene-025.mp4"
+            predicted_videos = self.start_predictions(model_pusher_artifact, annoy_artifact, video_file_path)
+
+            print(predicted_videos)
+
             # self.push_artifacts()
 
             logging.info("=============Training Pipleline has successfully completed!!!===========")

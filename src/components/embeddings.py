@@ -37,7 +37,7 @@ class VideoFolder(tf.keras.utils.Sequence):
                     label=class_path,
                     s3_link=self.config.S3_LINK.format(self.config.BUCKET, class_path, video)
                 ))
-                print(self.video_records)
+
 
     def transformations(self):
         def preprocess_video(video_path):

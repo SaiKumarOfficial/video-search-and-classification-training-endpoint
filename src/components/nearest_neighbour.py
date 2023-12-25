@@ -1,5 +1,6 @@
 from src.utils.database_handler import MongoDBClient
 from src.entity.config_entity import AnnoyConfig
+from src.entity.artifact_entity import AnnoyArtifact
 from src.constants.database import EMBEDDING_COLLECTION_NAME
 from src.logger import logging
 from annoy import AnnoyIndex
@@ -20,7 +21,7 @@ class CustomAnnoy(AnnoyIndex):
         self.label.append(label)
 
     def get_nns_by_vector(
-            self, vector, n: int, search_k: int = ..., include_distances: Literal[False] = ...):
+            self, vector, n: int, search_k: int = 5, include_distances: bool = False):
         indexes = super().get_nns_by_vector(vector, n, search_k, include_distances)
         labels = [self.label[link] for link in indexes]
         return labels
@@ -50,15 +51,20 @@ class Annoy(object):
 
         Ann.build(10)
         
-        embedddings_dir = os.path.dirname(self.config.embeddings_store_path)
-        os.makedirs(embedddings_dir, exist_ok= True)
+        embeddings_dir = os.path.dirname(self.config.embeddings_store_path)
+        os.makedirs(embeddings_dir, exist_ok= True)
 
+        embeddings_store_file_path = self.config.embeddings_store_path
         logging.info("Saving the data in annoy")
-        Ann.save(self.config.embeddings_store_path)
-        return True
+        Ann.save(embeddings_store_file_path)
+
+        annoy_artifact = AnnoyArtifact(embeddings_store_file_path=  embeddings_store_file_path)
+
+        return annoy_artifact
 
     def run_step(self):
-        self.build_annoy_format()
+        annoy_artifact= self.build_annoy_format()
+        return annoy_artifact
 
 
 if __name__ == "__main__":

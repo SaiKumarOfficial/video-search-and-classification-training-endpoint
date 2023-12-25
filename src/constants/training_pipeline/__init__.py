@@ -104,3 +104,9 @@ Embeddings related constants
 EMBEDDINGS_STORE_DIR_NAME: str = "embeddings"
 EMBEDDINGS_STORE_FILE_PATH: str = "embeddings.ann"
 EMBEDDINGS_STORE_JSON_FILE : str = "embeddings.json"
+
+SEARCH_MATRIX = 'euclidean'
+EMBEDDINGS_LENGTH = 32
+NUMBER_OF_PREDICTIONS = 3
+
+#MODEL_PATHS = [(os.path.join(from_root(), "artifacts", "embeddings.ann"), "embeddings.ann"),(os.path.join(from_root(), "artifacts", "model.pth"), "model.pth")]
