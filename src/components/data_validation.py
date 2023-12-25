@@ -1,6 +1,7 @@
 from src.entity.config_entity import DataValidationConfig
 from src.entity.artifact_entity import DataIngestionArtifact,DataValidationArtifact
 from src.utils.database_handler import MongoDBClient
+from src.constants.database import LABEL_COLLECTION_NAME
 from src.constants.training_pipeline import SCHEMA_KEY,VALID_EXTENSIONS
 from src.utils.common import write_yaml, read_yaml
 from src.exception import CustomException
@@ -26,7 +27,7 @@ class DataValidation:
         # Transform data into the desired format
             logging.info("Creating labels schema...")
             labels = []
-            result = self.client.get_collection_documents()
+            result = self.client.get_collection_documents(collection_name= LABEL_COLLECTION_NAME)
             data = list(result)
             for key,value in data[0].items():
                 if key=='_id':

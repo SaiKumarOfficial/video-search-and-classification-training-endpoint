@@ -13,21 +13,14 @@ from sklearn.metrics import confusion_matrix
 import datetime as dt
 import  os, sys
 import numpy as np
-class ModelTrainer:
-    def __init__(self, model_trainer_config: ModelTrainerConfig, 
-                    data_validation_artifact: DataValidationArtifact,
-                    data_preparation_artifact: DataPreparationArtifact):
-        try:
-            self.model_trainer_config = model_trainer_config
-            self.data_preparation_artifact = data_preparation_artifact
-            self.data_validation_artifact = data_validation_artifact
 
-        except Exception as e:
-            raise CustomException(e, sys)
+class LRCN_model:
+    def __init__(self, schema_file_path):
+        self.schema_file_path = schema_file_path
     
-    def create_LRCN_model(self, schema_path ):
+    def create_LRCN_model(self):
         try:
-            data = read_yaml(file_path=schema_path)
+            data = read_yaml(file_path=self.schema_file_path)
             labels = data[training_pipeline.SCHEMA_KEY]
 
             logging.info(" Constructing  model architecture...")
@@ -67,6 +60,18 @@ class ModelTrainer:
     
         except Exception as e:
             raise CustomException(e,sys)
+class ModelTrainer:
+    def __init__(self, model_trainer_config: ModelTrainerConfig, 
+                    data_validation_artifact: DataValidationArtifact,
+                    data_preparation_artifact: DataPreparationArtifact):
+        try:
+            self.model_trainer_config = model_trainer_config
+            self.data_preparation_artifact = data_preparation_artifact
+            self.data_validation_artifact = data_validation_artifact
+
+        except Exception as e:
+            raise CustomException(e, sys)
+
         
     def compile_model(self, model):
         try:
@@ -118,7 +123,8 @@ class ModelTrainer:
         try:
             logging.info("========== Starting model training phase ==================")
             schema_file_path = self.data_validation_artifact.labels_schema_file_path
-            model = self.create_LRCN_model(schema_file_path)
+            lrcn_model=  LRCN_model(schema_file_path)
+            model = lrcn_model.create_LRCN_model()
 
             self.compile_model(model= model)
 

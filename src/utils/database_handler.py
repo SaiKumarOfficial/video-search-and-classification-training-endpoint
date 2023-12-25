@@ -8,10 +8,10 @@ class MongoDBClient(object):
         url = database.URL
         self.client = MongoClient(url)
 
-    def insert_bulk_record(self, documents: List[Dict[str, Any]]):
+    def insert_bulk_record(self, documents: List[Dict[str, Any]], collection_name):
         try:
             db = self.client[database.DATABASE_NAME]
-            collection = database.COLLECTION_NAME
+            collection = collection_name
             if collection not in db.list_collection_names():
                 db.create_collection(collection)
             result = db[collection].insert_many(documents)
@@ -19,10 +19,10 @@ class MongoDBClient(object):
         except Exception as e:
             raise e
 
-    def get_collection_documents(self):
+    def get_collection_documents(self,collection_name):
         try:
             db = self.client[database.DATABASE_NAME]
-            collection = database.COLLECTION_NAME
+            collection = collection_name
             result = db[collection].find()
             return result
         except Exception as e:

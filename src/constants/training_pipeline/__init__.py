@@ -80,8 +80,8 @@ LOSS = "categorical_crossentropy"
 METRICS = ["accuracy"]
 
 BATCH_SIZE = 4
-EPOCHS = 30
-ER_STOP_PATIENCE = 20
+EPOCHS = 10
+ER_STOP_PATIENCE = 6
 
 
 """
@@ -98,3 +98,9 @@ MODEL_PUSHER_DIR_NAME: str = "model_pusher"
 MODEL_PUSHER_SAVED_MODEL_DIR: str = SAVED_MODEL_DIR
 
 
+"""
+Embeddings related constants
+"""
+EMBEDDINGS_STORE_DIR_NAME: str = "embeddings"
+EMBEDDINGS_STORE_FILE_PATH: str = "embeddings.ann"
+EMBEDDINGS_STORE_JSON_FILE : str = "embeddings.json"

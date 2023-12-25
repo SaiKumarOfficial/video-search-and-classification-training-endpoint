@@ -1,4 +1,5 @@
 from src.constants import training_pipeline
+from src.entity.artifact_entity import DataValidationArtifact
 from datetime import datetime
 from from_root import from_root
 import os
@@ -109,3 +110,34 @@ class ModelPusherConfig:
             training_pipeline.SAVED_MODEL_DIR,
             f"{timestamp}",
             training_pipeline.MODEL_FILE_NAME)   
+        
+class VideoFolderConfig:
+    def __init__(self,data_validataion_artifact: DataValidationArtifact):
+        self.ROOT_DIR = data_validataion_artifact.valid_data_dir
+        self.IMAGE_SIZE = training_pipeline.IMAGE_HEIGHT
+        self.LABEL_MAP = {}
+        self.BUCKET: str = "isro-documentary-videos"
+        self.S3_LINK = "https://{0}.s3.ap-south-1.amazonaws.com/videos/{1}/{2}"
+
+    def get_video_folder_config(self):
+        return self.__dict__
+
+
+# class EmbeddingsConfig:
+#     def __init__(self, model_pusher_config: ModelPusherConfig):
+#         self.MODEL_STORE_PATH = model_pusher_config.saved_model_path
+
+#     def get_embeddings_config(self):
+#         return self.__dict__
+
+
+class AnnoyConfig:
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.embeddings_store_dir = os.path.join(training_pipeline_config.artifact_dir,
+                                                training_pipeline.EMBEDDINGS_STORE_DIR_NAME)
+        self.embeddings_store_path = os.path.join(self.embeddings_store_dir,
+                                                  training_pipeline.EMBEDDINGS_STORE_FILE_PATH)
+
+    def get_annoy_config(self):
+        return self.__dict__
+    
