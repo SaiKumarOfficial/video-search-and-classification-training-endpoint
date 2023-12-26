@@ -113,8 +113,8 @@ class DataValidation:
                     for video in videos[:min_videos]:
                         src_path = os.path.join(label_path, video)
                         dest_path = os.path.join(valid_path, video)
-                        shutil.copy2(src_path, dest_path)
-                        logging.info(f"Copied: {src_path} to {dest_path}")
+                        shutil.move(src_path, dest_path)
+                        logging.info(f"Moved: {src_path} to {dest_path}")
             logging.info("Returning the valid data directory")
             return valid_directory
         except Exception as e:

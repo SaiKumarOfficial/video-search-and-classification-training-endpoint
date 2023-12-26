@@ -142,6 +142,10 @@ class ModelTrainer:
             # Evaluating test data
             labels_test_pred = model.predict(features_test)
             classification_test_metrics = self.evaluate_model(y_predict=labels_test_pred,y_true= labels_test)
+
+
+            logging.info(f"Training accuracy:{classification_train_metrics.accuracy} , Testing accuracy: {classification_test_metrics.accuracy}" )
+            
             diff =  abs(classification_train_metrics.accuracy - classification_test_metrics.accuracy)
             
             # if diff > self.model_trainer_config.overfitting_underfitting_threshold:
