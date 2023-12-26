@@ -1,0 +1,7 @@
+notebook/
+training
+.env
+.gitignore
+notes.txt
+practise.py
+src.egg-info
