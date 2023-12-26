@@ -9,7 +9,7 @@ PIPELINE_NAME = "training_pipeline"
 
 
 SAVED_MODEL_DIR = os.path.join("saved_models")
-MODEL_FILE_NAME = "model.pkl"
+MODEL_FILE_NAME = "model.h5"
 PREPROCESSING_FILE_NAME = "preprocessing.pkl"
 
 """
@@ -31,7 +31,7 @@ DATA_INGESTION_RAW_DIR = "raw"
 Data Validation related constants
 """
 DATA_VALIDATION_DIR_NAME: str = "data_validation"
-MINIMUM_NO_OF_VIDEOS: int = 2
+MINIMUM_NO_OF_VIDEOS: int = 30
 LABELS_SCHEMA_FILE_DIR: str = "schema"
 LABELS_SCHEMA_FILE_NAME = 'labels_schema.yaml'
 DATA_VALIDATION_VALID_DATA_DIR: str = "valid"
@@ -57,6 +57,7 @@ LABELS_TEST_FILE_NAME: str = "labels_test.npy"
 
 IMAGE_WIDTH, IMAGE_HEIGHT = 112,112
 SEQUENCE_LENGTH: int = 50
+CLASSES_LIST = ['Animation','Graphics','IndoorControlRoom','OutdoorLaunchpad','PersonCloseUp']
 
 DATA_PREPARATION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
 DATA_PREPARATION_SEED_VALUE: int  = 47
@@ -67,7 +68,7 @@ Model Trainer related constants
 """
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str ="trained_models"
-MODEL_TRAINER_EXPECTED_SCORE: float = 0.75
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.70
 MODEL_TRAINER_OVER_FITTING_UNDER_FITTING_THRESHOLD: float= 0.06
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.h5"
 
@@ -80,8 +81,8 @@ LOSS = "categorical_crossentropy"
 METRICS = ["accuracy"]
 
 BATCH_SIZE = 4
-EPOCHS = 10
-ER_STOP_PATIENCE = 6
+EPOCHS = 30
+ER_STOP_PATIENCE = 20
 
 
 """
@@ -107,6 +108,6 @@ EMBEDDINGS_STORE_JSON_FILE : str = "embeddings.json"
 
 SEARCH_MATRIX = 'euclidean'
 EMBEDDINGS_LENGTH = 32
-NUMBER_OF_PREDICTIONS = 3
+NUMBER_OF_PREDICTIONS = 10
 
 #MODEL_PATHS = [(os.path.join(from_root(), "artifacts", "embeddings.ann"), "embeddings.ann"),(os.path.join(from_root(), "artifacts", "model.pth"), "model.pth")]

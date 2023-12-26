@@ -13,6 +13,7 @@ from src.constants.training_pipeline import SEQUENCE_LENGTH, IMAGE_HEIGHT,IMAGE_
 from src.utils.storage_handler import S3Connector
 from src.logger import logging
 from src.exception import CustomException
+from moviepy.editor import VideoFileClip
 import os,sys
 from tqdm import tqdm
 import tensorflow as tf
@@ -129,17 +130,17 @@ class TrainPipeline:
         annoy_artifact = ann.run_step()
         return annoy_artifact
     
-    def start_predictions(self, model_pusher_artifact: ModelPusherArtifact, annoy_artifact: AnnoyArtifact,video_file_path):
+    def start_predictions(self, model_pusher_artifact: ModelPusherArtifact, annoy_artifact: AnnoyArtifact,video_file_path, output_file_path):
         predictions = Prediction( model_pusher_artifact, annoy_artifact)
-        resultant_links = predictions.run_predictions(video_file_path)
+        resultant_links = predictions.run_predictions(video_file_path,output_file_path)
     
         return resultant_links
-    # @staticmethod
-    # def push_artifacts():
-    #     connection = S3Connector()
-    #     response = connection.zip_files()
+    
+    def push_artifacts(self, annoy_artifact: AnnoyArtifact, model_pusher_artifact: ModelPusherArtifact):
+        connection = S3Connector(annoy_artifact, model_pusher_artifact)
+        response = connection.zip_files()
 
-    #     return response
+        return response
     
     def run_pipeline(self):
         try:
@@ -155,14 +156,22 @@ class TrainPipeline:
 
             self.generated_embeddings(data_validataion_artifact, model_pusher_artifact)
             annoy_artifact = self.create_annoy()
+            
 
-            video_file_path = "C:\\Users\\Sheela Sai kumar\\Documents\\ML projects\\video-streaming-training-endpoint\\src\\pipeline\\artifact\\12_25_23_20_04_36\\data_ingestion\\raw\\Graphics\\Video001-Scene-025.mp4"
-            predicted_videos = self.start_predictions(model_pusher_artifact, annoy_artifact, video_file_path)
+            video_file_path = "C:\\Users\\Sheela Sai kumar\\Documents\\ML projects\\video-streaming-training-endpoint\\src\\pipeline\\artifact\\12_26_23_12_06_08\\data_validation\\valid\\IndoorControlRoom\\Video023-Scene-136.mp4"
+            output_video_file_path = "C:\\Users\\Sheela Sai kumar\\Documents\\ML projects\\video-streaming-training-endpoint\\test_videos\\output.mp4"
+
+
+            predicted_videos = self.start_predictions(model_pusher_artifact, annoy_artifact, video_file_path, output_video_file_path)
 
             print(predicted_videos)
 
-            # self.push_artifacts()
+            response = self.push_artifacts(annoy_artifact,model_pusher_artifact)
+            print(response)
 
+            # Display the output video.
+            # VideoFileClip(output_video_file_path, audio=False, target_resolution=(300,None)).ipython_display()
+            
             logging.info("=============Training Pipleline has successfully completed!!!===========")
 
         except Exception as e:
